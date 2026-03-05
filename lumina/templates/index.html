@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumina — Your AI Mental Health Companion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<!-- Ambient Background -->
+<div class="ambient-bg">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="noise-overlay"></div>
+</div>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="nav-logo">
+    <div class="logo-mark">✦</div>
+    <span class="logo-text">Lumina</span>
+  </div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" data-tab="home">Home</button>
+    <button class="nav-tab" data-tab="companion">Companion</button>
+    <button class="nav-tab" data-tab="journal">Journal</button>
+    <button class="nav-tab" data-tab="breathe">Breathe</button>
+    <button class="nav-tab" data-tab="insights">Insights</button>
+  </div>
+  <div class="nav-time" id="liveTime"></div>
+</nav>
+
+<!-- ====== HOME TAB ====== -->
+<section class="tab-section active" id="tab-home">
+  <div class="home-hero">
+    <div class="hero-text">
+      <p class="hero-eyebrow">How are you feeling today?</p>
+      <h1 class="hero-title">Your mind deserves<br><em>care & clarity.</em></h1>
+      <p class="hero-sub">Share what's on your heart. Lumina listens, understands, and walks with you.</p>
+    </div>
+
+    <!-- Emotion Check-in -->
+    <div class="checkin-card">
+      <div class="checkin-header">
+        <span class="checkin-label">DAILY CHECK-IN</span>
+        <div class="pulse-dot"></div>
+      </div>
+      <textarea class="checkin-input" id="checkinInput" placeholder="Type freely... What's weighing on your mind? What's bringing you joy? There are no wrong answers here." rows="4"></textarea>
+      <div class="checkin-footer">
+        <div class="char-count"><span id="charCount">0</span> / 500</div>
+        <button class="btn-primary" id="analyzeBtn">
+          <span class="btn-text">Analyze & Reflect</span>
+          <span class="btn-icon">→</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Emotion Result -->
+    <div class="emotion-result" id="emotionResult" style="display:none">
+      <div class="emotion-header">
+        <div class="emotion-badge" id="emotionBadge">
+          <span class="emotion-emoji" id="emotionEmoji">💭</span>
+          <span class="emotion-label" id="emotionLabel">Analyzing...</span>
+        </div>
+        <div class="emotion-intensity">
+          <span class="intensity-label">Intensity</span>
+          <div class="intensity-bar"><div class="intensity-fill" id="intensityFill"></div></div>
+          <span class="intensity-num" id="intensityNum">—</span>
+        </div>
+      </div>
+      <p class="lumina-response" id="luminaResponse"></p>
+      <div class="technique-card" id="techniqueCard">
+        <div class="technique-tag">SUGGESTED TECHNIQUE</div>
+        <div class="technique-name" id="techniqueName"></div>
+        <p class="technique-desc" id="techniqueDesc"></p>
+      </div>
+      <div class="affirmation-box" id="affirmationBox">
+        <span class="affirmation-mark">"</span>
+        <p class="affirmation-text" id="affirmationText"></p>
+        <span class="affirmation-mark">"</span>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <div class="qa-item" onclick="switchTab('companion')">
+        <div class="qa-icon">💬</div>
+        <div class="qa-text">
+          <div class="qa-title">Talk to Lumina</div>
+          <div class="qa-sub">Open therapy chat</div>
+        </div>
+        <div class="qa-arrow">↗</div>
+      </div>
+      <div class="qa-item" onclick="switchTab('breathe')">
+        <div class="qa-icon">🌬️</div>
+        <div class="qa-text">
+          <div class="qa-title">Breathing Exercise</div>
+          <div class="qa-sub">Calm your nervous system</div>
+        </div>
+        <div class="qa-arrow">↗</div>
+      </div>
+      <div class="qa-item" onclick="switchTab('journal')">
+        <div class="qa-icon">📓</div>
+        <div class="qa-text">
+          <div class="qa-title">Reflective Journal</div>
+          <div class="qa-sub">Write & process</div>
+        </div>
+        <div class="qa-arrow">↗</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== COMPANION TAB ====== -->
+<section class="tab-section" id="tab-companion">
+  <div class="companion-layout">
+    <div class="companion-sidebar">
+      <div class="companion-profile">
+        <div class="companion-avatar">
+          <div class="avatar-ring"></div>
+          <div class="avatar-core">✦</div>
+        </div>
+        <div class="companion-info">
+          <div class="companion-name">Lumina</div>
+          <div class="companion-status"><span class="status-dot"></span> Present & listening</div>
+        </div>
+      </div>
+      <div class="session-stats">
+        <div class="stat-item">
+          <div class="stat-val" id="msgCount">0</div>
+          <div class="stat-key">Messages</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-val" id="sessionTime">0m</div>
+          <div class="stat-key">Session</div>
+        </div>
+      </div>
+      <div class="conversation-starters">
+        <div class="starters-label">QUICK STARTS</div>
+        <button class="starter-btn" onclick="useStarter(this)">I'm feeling overwhelmed today</button>
+        <button class="starter-btn" onclick="useStarter(this)">I can't stop overthinking</button>
+        <button class="starter-btn" onclick="useStarter(this)">I need help with anxiety</button>
+        <button class="starter-btn" onclick="useStarter(this)">I had a difficult interaction</button>
+        <button class="starter-btn" onclick="useStarter(this)">I'm struggling to find motivation</button>
+      </div>
+      <button class="clear-chat-btn" onclick="clearChat()">Clear Session</button>
+    </div>
+
+    <div class="chat-area">
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-message lumina-msg">
+          <div class="msg-avatar">✦</div>
+          <div class="msg-bubble">
+            <p>Hello, I'm Lumina. This is your safe space — no judgment, no rush. What's on your mind today? I'm fully here with you. 🌿</p>
+            <div class="msg-time">Just now</div>
+          </div>
+        </div>
+      </div>
+      <div class="chat-input-area">
+        <div class="typing-indicator" id="typingIndicator" style="display:none">
+          <span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>
+          <span class="typing-label">Lumina is reflecting...</span>
+        </div>
+        <div class="chat-input-row">
+          <textarea class="chat-input" id="chatInput" placeholder="Share what's on your mind..." rows="1"></textarea>
+          <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== JOURNAL TAB ====== -->
+<section class="tab-section" id="tab-journal">
+  <div class="journal-layout">
+    <div class="journal-header-area">
+      <h2 class="section-title">Reflective Journal</h2>
+      <p class="section-sub">Writing is healing. Let your thoughts flow freely.</p>
+    </div>
+
+    <div class="journal-form">
+      <div class="journal-date" id="journalDate"></div>
+      
+      <div class="mood-picker">
+        <div class="mood-label">How are you feeling right now?</div>
+        <div class="mood-options">
+          <button class="mood-opt" data-mood="joy" onclick="selectMood(this)">😊 Joyful</button>
+          <button class="mood-opt" data-mood="hope" onclick="selectMood(this)">🌱 Hopeful</button>
+          <button class="mood-opt" data-mood="neutral" onclick="selectMood(this)">😐 Neutral</button>
+          <button class="mood-opt" data-mood="anxiety" onclick="selectMood(this)">😰 Anxious</button>
+          <button class="mood-opt" data-mood="sadness" onclick="selectMood(this)">😢 Sad</button>
+          <button class="mood-opt" data-mood="overwhelmed" onclick="selectMood(this)">🌊 Overwhelmed</button>
+          <button class="mood-opt" data-mood="anger" onclick="selectMood(this)">🔥 Frustrated</button>
+          <button class="mood-opt" data-mood="fear" onclick="selectMood(this)">😨 Fearful</button>
+        </div>
+      </div>
+
+      <div class="journal-prompts">
+        <div class="prompt-label">WRITING PROMPT</div>
+        <div class="prompt-text" id="journalPrompt">What is one thing that challenged you today, and what did you learn from it?</div>
+        <button class="refresh-prompt" onclick="refreshPrompt()">↺ New Prompt</button>
+      </div>
+
+      <textarea class="journal-textarea" id="journalText" placeholder="Begin writing... there's no right or wrong way to do this."></textarea>
+
+      <div class="gratitude-section">
+        <div class="gratitude-label">3 Things I'm Grateful For Today</div>
+        <div class="gratitude-inputs">
+          <input type="text" class="gratitude-input" id="grat1" placeholder="1. Something small that made you smile...">
+          <input type="text" class="gratitude-input" id="grat2" placeholder="2. A person who matters to you...">
+          <input type="text" class="gratitude-input" id="grat3" placeholder="3. Something about yourself...">
+        </div>
+      </div>
+
+      <button class="btn-primary btn-full" onclick="saveJournal()">
+        <span>Save Journal Entry</span>
+        <span>✦</span>
+      </button>
+
+      <div class="save-confirmation" id="saveConfirmation" style="display:none">
+        ✓ Entry saved. Your words are held safely.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== BREATHE TAB ====== -->
+<section class="tab-section" id="tab-breathe">
+  <div class="breathe-layout">
+    <h2 class="section-title">Breathing Sanctuary</h2>
+    <p class="section-sub">Your breath is always available as an anchor to the present moment.</p>
+
+    <div class="technique-selector">
+      <button class="tech-btn active" data-tech="box" onclick="selectTech(this, 'box')">Box Breathing</button>
+      <button class="tech-btn" data-tech="478" onclick="selectTech(this, '478')">4-7-8 Method</button>
+      <button class="tech-btn" data-tech="calm" onclick="selectTech(this, 'calm')">Calm Breath</button>
+    </div>
+
+    <div class="breathe-center">
+      <div class="breathe-circle" id="breatheCircle">
+        <div class="breathe-ring breathe-ring-1"></div>
+        <div class="breathe-ring breathe-ring-2"></div>
+        <div class="breathe-ring breathe-ring-3"></div>
+        <div class="breathe-core">
+          <div class="breathe-instruction" id="breatheInstruction">Press Start</div>
+          <div class="breathe-count" id="breatheCount"></div>
+        </div>
+      </div>
+
+      <div class="breathe-info" id="breatheInfo">
+        <div class="breathe-tech-name" id="breatheTechName">Box Breathing</div>
+        <div class="breathe-tech-desc" id="breatheTechDesc">Used by Navy SEALs and therapists worldwide. Equalizes the nervous system and brings immediate calm.</div>
+      </div>
+
+      <div class="breathe-controls">
+        <div class="cycle-info">Cycle <span id="cycleNum">0</span> / <span id="cycleTotal">4</span></div>
+        <button class="btn-breathe" id="breatheBtn" onclick="toggleBreath()">Begin</button>
+        <div class="breathe-benefit" id="breatheBenefit">Ready when you are</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== INSIGHTS TAB ====== -->
+<section class="tab-section" id="tab-insights">
+  <div class="insights-layout">
+    <div class="insights-header">
+      <h2 class="section-title">Your Wellness Insights</h2>
+      <p class="section-sub">Patterns in your emotional journey, illuminated.</p>
+      <button class="btn-insights" onclick="loadInsights()">Generate AI Insights ✦</button>
+    </div>
+
+    <!-- Mood Chart -->
+    <div class="chart-card">
+      <div class="chart-title">Mood History</div>
+      <div class="chart-area">
+        <canvas id="moodChart" width="700" height="200"></canvas>
+        <div class="no-data" id="noChartData">Complete a check-in to see your mood history</div>
+      </div>
+    </div>
+
+    <!-- AI Insights -->
+    <div class="ai-insights-grid" id="insightsGrid" style="display:none">
+      <div class="insight-card pattern-card">
+        <div class="insight-icon">🔍</div>
+        <div class="insight-label">PATTERN DETECTED</div>
+        <p class="insight-text" id="insightPattern"></p>
+      </div>
+      <div class="insight-card strength-card">
+        <div class="insight-icon">💪</div>
+        <div class="insight-label">YOUR STRENGTH</div>
+        <p class="insight-text" id="insightStrength"></p>
+      </div>
+      <div class="insight-card suggestion-card">
+        <div class="insight-icon">🌟</div>
+        <div class="insight-label">THIS WEEK'S FOCUS</div>
+        <p class="insight-text" id="insightSuggestion"></p>
+      </div>
+      <div class="insight-card affirmation-card-insights">
+        <div class="insight-icon">✨</div>
+        <div class="insight-label">PERSONAL AFFIRMATION</div>
+        <p class="insight-text" id="insightAffirmation"></p>
+      </div>
+    </div>
+
+    <!-- Mood Distribution -->
+    <div class="mood-dist-card">
+      <div class="chart-title">Emotional Spectrum</div>
+      <div class="mood-bars" id="moodBars">
+        <div class="no-data-small">Log your emotions to see your spectrum</div>
+      </div>
+    </div>
+
+    <!-- Crisis Resources -->
+    <div class="crisis-card">
+      <div class="crisis-header">🌸 You're Not Alone</div>
+      <p class="crisis-text">If you're experiencing a crisis, please reach out to a professional. Lumina is a supportive companion, not a replacement for therapy.</p>
+      <div class="crisis-links">
+        <a href="https://988lifeline.org" target="_blank" class="crisis-link">988 Suicide & Crisis Lifeline</a>
+        <a href="https://www.crisistextline.org" target="_blank" class="crisis-link">Crisis Text Line: Text HOME to 741741</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="/static/js/main.js"></script>
+</body>
+</html>
